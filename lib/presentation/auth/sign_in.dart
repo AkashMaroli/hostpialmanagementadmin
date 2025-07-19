@@ -1,8 +1,9 @@
-
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hospitalmanagementadmin/core/constants.dart';
-import 'package:hospitalmanagementadmin/presentation/auth/sign_up.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
+import 'package:hospitalmanagementadmin/data/services/auth_services.dart';
+import 'package:hospitalmanagementadmin/presentation/widgets/drawer_widget.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -18,209 +19,142 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold(backgroundColor: const Color.fromARGB(255, 211, 240, 255),
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(left: 20, right: 20, top: 70),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    themeColor, // Light Sea Green
-                    themeColor2, // Dark Cyan
-                  ],
+            child: Card(elevation: 3,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      const Color.fromARGB(255, 151, 225, 255),
+                      // Light Sea Green
+                      const Color.fromARGB(255, 130, 164, 177), // Dark Cyan
+                    ],
+                  ),
                 ),
-              ),
-              height: MediaQuery.sizeOf(context).height/1.3,
-              width: 500,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
-                child: Form(
-                  key: _formkey,
-                  child: Column(
-                    spacing: 15,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Welcome Back',
-                        style: TextStyle(
-                          fontSize: 35,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        ' Please sign in to continue',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: const Color.fromARGB(255, 224, 224, 224),
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Text(
-                            ' Email',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: const Color.fromARGB(255, 0, 0, 0),
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                      normaltextfield(
-                        'Email',
-                        Icons.email_outlined,
-                        emailController,
-                        (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your email';
-                          } else if (!RegExp(
-                            r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                          ).hasMatch(value)) {
-                            return 'Please enter a valid email';
-                          }
-                          return null;
-                        },
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            ' Password',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: const Color.fromARGB(255, 0, 0, 0),
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                      passwordTextField('Enter', true, passwordController, (
-                        value,
-                      ) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your password';
-                        } else if (value.length < 6) {
-                          return 'Password must be at least 6 characters';
-                        }
-                        return null;
-                      }),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            'Forget Password?',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: const Color.fromARGB(255, 0, 0, 0),
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                     //     _submitForm(context);
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => BottomNavBar()),
-                          // );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          // fixedSize: Size(double.infinity, 20),
-                          minimumSize: Size(double.infinity, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                        child: Text(
-                          'Sign In',
+                height: MediaQuery.sizeOf(context).height / 1.5,
+                width: 400,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
+                  child: Form(
+                    key: _formkey,
+                    child: Column(
+                      spacing: 15,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Welcome Back',
                           style: TextStyle(
-                            fontSize: 18,
-                            color: const Color.fromARGB(255, 255, 255, 255),
-                            fontWeight: FontWeight.w500,
+                            fontSize: 35,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Don't have an account?",
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: const Color.fromARGB(255, 255, 255, 255),
-                              fontWeight: FontWeight.w500,
-                            ),
+                        Text(
+                          ' Please sign in to continue',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: const Color.fromARGB(255, 224, 224, 224),
+                            fontWeight: FontWeight.w700,
                           ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SignUpScreen(),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              'Sign Up',
+                        ),
+                        SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Text(
+                              ' Email',
                               style: TextStyle(
                                 fontSize: 18,
                                 color: const Color.fromARGB(255, 0, 0, 0),
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-          
-                      ElevatedButton(
-                        onPressed: () {
-                  //         signInWithGoogle();
-                           
-                          //  Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => BottomNavBar(),
-                          //   ),
-                          // );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          // fixedSize: Size(double.infinity, 20),
-                          minimumSize: Size(double.infinity, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
+                          ],
                         ),
-                        child: Row(
-                          spacing: 5,
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        normaltextfield(
+                          'Email',
+                          Icons.email_outlined,
+                          emailController,
+                          (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your email';
+                            } else if (!RegExp(
+                              r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                            ).hasMatch(value)) {
+                              return 'Please enter a valid email';
+                            }
+                            return null;
+                          },
+                        ),
+                        Row(
                           children: [
-                            Image.asset(
-                              height: 35,
-                              width: 35,
-                              'assets/icons/google_logo.png',
-                            ),
                             Text(
-                              'Sign Up with Google',
+                              ' Password',
                               style: TextStyle(
                                 fontSize: 18,
-                                color: const Color.fromARGB(255, 255, 255, 255),
+                                color: const Color.fromARGB(255, 0, 0, 0),
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
+                        passwordTextField('Enter', true, passwordController, (
+                          value,
+                        ) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your password';
+                          } else if (value.length < 6) {
+                            return 'Password must be at least 6 characters';
+                          }
+                          return null;
+                        }),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.end,
+                        //   children: [
+                        //     Text(
+                        //       'Forget Password?',
+                        //       style: TextStyle(
+                        //         fontSize: 18,
+                        //         color: const Color.fromARGB(255, 0, 0, 0),
+                        //         fontWeight: FontWeight.w500,
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
+                        SizedBox(height: 2,),
+                        ElevatedButton(
+                          onPressed: () {
+                            _submitForm(context);
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(builder: (context) => BottomNavBar()),
+                            // );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            // fixedSize: Size(double.infinity, 20),
+                            minimumSize: Size(double.infinity, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                          child: Text(
+                            'Sign In',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: const Color.fromARGB(255, 255, 255, 255),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -229,32 +163,32 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
       ),
     );
-    
   }
 
-//   void _submitForm(BuildContext context) async {
-//     if (_formkey.currentState!.validate()) {
-//       String email = emailController.text.trim();
-//       String password = passwordController.text.trim();
+  void _submitForm(BuildContext context) async {
+    if (_formkey.currentState!.validate()) {
+      String email = emailController.text.trim();
+      String password = passwordController.text.trim();
 
-//       User? user = await signIn(email, password);
+      User? user = await signIn(email, password);
 
-//       if (user != null) {
-//         // If user exists, navigate to BottomNavBar
-//         Navigator.pushReplacement(
-//           // ignore: use_build_context_synchronously
-//           context,
-//           MaterialPageRoute(builder: (context) => BottomNavBar()),
-//         );
-//       } else {
-//         // Show error message
-//         ScaffoldMessenger.of(
-//           context,
-//         ).showSnackBar(SnackBar(content: Text('Invalid email or password')));
-//       }
-//     }
-//   }
- }
+      if (user != null) {
+        // If user exists, navigate to BottomNavBar
+        // Navigator.pushReplacement(
+        //   // ignore: use_build_context_synchronously
+        //   context,
+        //   MaterialPageRoute(builder: (context) => ()),
+        // );
+        Get.off(HomeScreen());
+      } else {
+        // Show error message
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Invalid email or password')));
+      }
+    }
+  }
+}
 
 // custom textformfield
 Widget normaltextfield(
